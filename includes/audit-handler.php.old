@@ -1,0 +1,89 @@
+<?php
+// Sécurité : Empêcher un accès direct au fichier
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+// Fonction AJAX pour récupérer les données d'audit
+function slpi_get_audit_data() {
+    global $wpdb;
+
+    $table_name = $wpdb->prefix . 'slpi_results';
+
+    // Récupérer le score de la page principale
+    $homepage_url = get_home_url();
+    $homepage_score = $wpdb->get_row(
+        $wpdb->prepare("SELECT score_mobile, score_desktop, date_analyse FROM $table_name WHERE url = %s", $homepage_url),
+        ARRAY_A
+    );
+
+    // Calculer la moyenne des scores de toutes les pages analysées
+    $average_scores = $wpdb->get_row("
+        SELECT AVG(score_mobile) as avg_mobile, AVG(score_desktop) as avg_desktop
+        FROM $table_name
+    ", ARRAY_A);
+
+    // Récupérer uniquement la dernière analyse pour chaque URL
+    $quadrant_data = $wpdb->get_results("
+        SELECT url, MAX(date_analyse) as last_date, score_mobile as x, score_desktop as y
+        FROM $table_name
+        GROUP BY url
+        ORDER BY last_date DESC
+    ", ARRAY_A);
+
+    // Ajouter le titre et le type de contenu à chaque résultat pour le graphique
+    $formatted_quadrant_data = array_map(function ($item) {
+        $post_id = url_to_postid($item['url']);
+        $post_type = get_post_type($post_id);
+        $post_type = $post_type ?: 'page';  // Assurez-vous que le type est bien défini
+        $post_title = get_the_title($post_id);
+    
+        return [
+            'x' => (int) $item['x'],
+            'y' => (int) $item['y'],
+            'url' => $item['url'],
+            'type' => $post_type,
+            'title' => $post_title ?: 'Sans titre'
+        ];
+    }, $quadrant_data);
+
+    // Retourner les données sous forme de réponse AJAX
+    wp_send_json_success([
+        'homepage_score_mobile' => $homepage_score ? $homepage_score['score_mobile'] : 0,
+        'homepage_score_desktop' => $homepage_score ? $homepage_score['score_desktop'] : 0,
+        'homepage_analysis_date' => $homepage_score ? $homepage_score['date_analyse'] : 'N/A',
+        'average_score_mobile' => $average_scores ? round($average_scores['avg_mobile']) : 0,
+        'average_score_desktop' => $average_scores ? round($average_scores['avg_desktop']) : 0,
+        'quadrant_data' => $formatted_quadrant_data
+    ]);
+}
+add_action('wp_ajax_slpi_get_audit_data', 'slpi_get_audit_data');
+add_action('wp_ajax_slpi_get_audit_data', 'slpi_get_audit_data');
+
+// vérifier l’existence d’une analyse en base de données et retourner les résultats.
+function slpi_get_homepage_score() {
+    global $wpdb;
+
+    $table_name = $wpdb->prefix . 'slpi_results';
+    $homepage_url = home_url(); // URL exacte de la page d’accueil
+
+    // Récupérer la dernière analyse de la page d’accueil
+    $result = $wpdb->get_row(
+        $wpdb->prepare(
+            "SELECT score_mobile, score_desktop, date_analyse FROM $table_name WHERE url = %s ORDER BY date_analyse DESC LIMIT 1",
+            $homepage_url
+        ),
+        ARRAY_A
+    );
+
+    if ($result) {
+        wp_send_json_success([
+            'score_mobile' => $result['score_mobile'],
+            'score_desktop' => $result['score_desktop'],
+            'date_analyse' => $result['date_analyse']
+        ]);
+    } else {
+        wp_send_json_error('Aucune analyse disponible pour la page d’accueil.');
+    }
+}
+add_action('wp_ajax_slpi_get_homepage_score', 'slpi_get_homepage_score');
