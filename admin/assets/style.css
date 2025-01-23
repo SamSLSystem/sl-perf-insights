@@ -71,16 +71,18 @@ a:hover {
 }
 
 .slpi-tab-content {
+    overflow: hidden; /* Empêche les débordements */
     display: none !important;
     padding: 20px;
-    background: #ffffff;
     border: 0px solid #ddd;
     border-radius: 0 0 5px 5px;
 }
 
 /* Afficher uniquement le contenu de l’onglet actif */
 .slpi-tab-content.active {
-    display: block !important;
+    display: block !important; /* Affiche uniquement l'onglet actif */
+    padding: 20px; /* Ajoute un espacement intérieur */
+    box-sizing: border-box; /* Assure une bonne gestion des dimensions */
 }
 
 .dataTables_length label {
@@ -103,11 +105,14 @@ a:hover {
 }
 
 .audit-card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%; /* La carte occupe 100% de la largeur de son conteneur */
+    box-sizing: border-box;
+    margin: 0 auto; /* Centrer si nécessaire */
     padding: 20px;
     border: 0px solid #ddd;
     border-radius: 8px;
     background: #f9f9f9;
-    width: 200px;
     text-align: center;
 }
 
@@ -378,4 +383,154 @@ a:hover {
 .custom-close:focus {
     color: black;
     text-decoration: none;
+}
+
+/* Style pour les tableaux dans les cartes */
+table.display {
+    width: 80%; /* Limite la largeur à 80% du conteneur */
+    margin: 0 auto; /* Centre le tableau horizontalement */
+    table-layout: auto; /* Permet aux colonnes de s'adapter au contenu */
+    border-collapse: collapse; /* Assure un style uniforme des bordures */
+}
+
+table.display thead th {
+    text-align: left;
+    padding: 10px;
+    border-bottom: 2px solid #ddd; /* Ligne de séparation pour l'en-tête */
+}
+
+table.display tbody tr td {
+    padding: 8px;
+    vertical-align: middle;
+    border-bottom: 1px solid #eee; /* Ligne de séparation pour les cellules */
+}
+
+/* Ajustement des colonnes */
+table.display tbody tr td:first-child,
+table.display thead th:first-child {
+    width: 40px; /* Colonne des cases à cocher avec largeur réduite */
+    text-align: center; /* Centrer le contenu */
+}
+
+table.display tbody tr td:nth-child(2) {
+    width: 10%; /* Colonne des IDs */
+}
+
+table.display tbody tr td:nth-child(3) {
+    width: auto; /* Colonne URL, s'adapte au contenu */
+}
+
+table.display tbody tr td:nth-child(4) {
+    width: 20%; /* Colonne des dates */
+}
+
+/* Amélioration de la présentation globale des tableaux */
+table.display tbody tr:hover {
+    background-color: #f9f9f9; /* Change le fond au survol */
+}
+
+table.display tbody tr:nth-child(even) {
+    background-color: #fefefe; /* Fond différent pour les lignes paires */
+}
+
+/* Style des boutons principaux */
+.button-primary {
+    background: linear-gradient(90deg, #0073aa, #005177); /* Dégradé bleu */
+    color: #ffffff;
+    border: none;
+    border-radius: 8px; /* Coins arrondis */
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease; /* Effet de transition pour le survol */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Légère ombre */
+}
+
+.button-primary:hover {
+    background: linear-gradient(90deg, #005177, #003f5f); /* Couleur plus sombre au survol */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* Ombre accentuée */
+    transform: translateY(-2px); /* Légère élévation */
+}
+
+/* Style des boutons secondaires (si besoin) */
+.button-secondary {
+    background: #ffffff;
+    color: #0073aa;
+    border: 2px solid #0073aa;
+    border-radius: 8px; /* Coins arrondis */
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease; /* Effet de transition pour le survol */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Légère ombre */
+}
+
+.button-secondary:hover {
+    background: #0073aa;
+    color: #ffffff;
+    border-color: #005177;
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* Ombre accentuée */
+    transform: translateY(-2px); /* Légère élévation */
+}
+
+
+/* Conteneur des cartes */
+.analyse-cards-container {
+    display: flex;
+    flex-wrap: wrap; /* Les cartes passent en ligne suivante sur petit écran */
+    gap: 20px; /* Espace entre les cartes */
+    justify-content: space-between; /* Espacement uniforme entre les cartes */
+}
+/* Styles des cartes */
+.audit-card {
+    flex: 1 1 calc(45% - 20px); /* Chaque carte occupe 50% moins l'espace du gap */
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    box-sizing: border-box;
+    max-width: 48%; /* Limite la largeur à 48% */
+}
+
+/* Pour petit écran, les cartes s'empilent */
+@media (max-width: 768px) {
+    .audit-card {
+        flex: 1 1 100%; /* Les cartes occupent 100% sur petit écran */
+        max-width: 100%;
+    }
+}
+
+/* Conteneur pour centrer le bouton et les résultats */
+.analyse-actions-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px; /* Espace entre le bouton et la carte des résultats */
+    margin-top: 20px;
+    width: 100%; /* Le conteneur occupe toute la largeur */
+}
+
+/* Style de la carte des résultats */
+#slpi-result {
+    width: 100%; /* La carte occupe toute la largeur disponible */
+    text-align: center; /* Centrer le texte dans la carte */
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+/* Styles spécifiques pour la carte des résultats */
+.result-card {
+    width: 100%; /* La carte occupe toute la largeur disponible */
+    text-align: center; /* Centre le texte dans la carte */
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Légère ombre */
+    margin-top: 20px; /* Espace au-dessus de la carte */
+    box-sizing: border-box; /* Assure que le padding est inclus dans la largeur totale */
 }

@@ -15,16 +15,17 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-// Définir le chemin et l'URL du plugin
+// Définir le chemin, l'URL et la version de la base de données du plugin
 define('SLPI_PATH', plugin_dir_path(__FILE__));
 define('SLPI_URL', plugin_dir_url(__FILE__));
 define('SLPI_DB_VERSION', '1.1'); // Version de la base de données
+
+define('SLPI_TEXT_DOMAIN', 'sl-perf-insights'); // Texte de domaine pour les traductions
 
 // Inclure les fichiers nécessaires
 require_once SLPI_PATH . 'admin/admin-page.php';
 require_once SLPI_PATH . 'includes/api-handler.php';
 require_once SLPI_PATH . 'includes/audit-handler.php';
-
 
 // Fonction pour créer ou mettre à jour la table
 function slpi_create_results_table() {
@@ -55,7 +56,7 @@ function slpi_create_results_table() {
         PRIMARY KEY (id)
     ) $charset_collate;";
 
-    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    require_once ABSPATH . 'wp-admin/includes/upgrade.php';
     dbDelta($sql);
 }
 
@@ -69,7 +70,7 @@ register_activation_hook(__FILE__, 'slpi_activate');
 // Vérifier et mettre à jour la base de données si nécessaire lors du chargement du plugin
 function slpi_check_db_update() {
     $current_version = get_option('slpi_db_version');
-    
+
     if ($current_version !== SLPI_DB_VERSION) {
         slpi_create_results_table();
         update_option('slpi_db_version', SLPI_DB_VERSION);
@@ -96,16 +97,13 @@ function slpi_enqueue_assets($hook) {
     if ($hook !== 'toplevel_page_sl-perf-insights') {
         return;
     }
-    
-    
-    
-    
+
     // Inclure le fichier CSS de DataTables
     wp_enqueue_style('datatables-style', 'https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css');
-    
+
     // Inclure le fichier JS de DataTables
     wp_enqueue_script('datatables-script', 'https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js', array('jquery'), '1.13.1', true);
-    
+
     // Inclure le fichier CSS du plugin
     wp_enqueue_style('slpi-style', SLPI_URL . 'admin/assets/style.css', [], '1.0');
 
@@ -124,7 +122,7 @@ function slpi_enqueue_assets($hook) {
     wp_enqueue_script('audit-homepage-js', SLPI_URL . 'admin/assets/audit-homepage.js', ['jquery', 'chart-js'], '1.0', true);
     wp_enqueue_script('audit-average-script', SLPI_URL . 'admin/assets/audit-average.js', ['jquery', 'audit-homepage-js'], '1.0', true);
     wp_enqueue_script('slpi-quadrant', SLPI_URL . 'admin/assets/quadrant.js', ['jquery', 'chart-js', 'datatables-script'], '1.0', true);
-    
+
     // Passer ajaxurl et l’URL de la page d’accueil à audit.js
     wp_localize_script('audit-homepage-js', 'slpiData', [
         'ajaxurl' => admin_url('admin-ajax.php'),
@@ -137,15 +135,15 @@ add_action('admin_enqueue_scripts', 'slpi_enqueue_assets');
 function slpi_uninstall() {
     // Vérifie si l'option "conserver les données" est activée
     $keep_data = get_option('slpi_keep_data');
-    
+
     if (!$keep_data) {
         global $wpdb;
         $table_name = $wpdb->prefix . 'slpi_results';
-        
+
         // Supprime la table si l'option "conserver les données" n'est pas activée
         $wpdb->query("DROP TABLE IF EXISTS $table_name");
     }
-    
+
     // Supprime les options du plugin
     delete_option('slpi_api_key');
     delete_option('slpi_keep_data');
@@ -153,4 +151,11 @@ function slpi_uninstall() {
 
 // Enregistre la fonction de désinstallation
 register_uninstall_hook(__FILE__, 'slpi_uninstall');
+
+// Ajouter des logs pour surveiller les erreurs critiques
+function slpi_log_error($message) {
+    if (defined('WP_DEBUG') && WP_DEBUG) {
+        error_log('[SL Perf Insights] ' . $message);
+    }
+}
 ?>
