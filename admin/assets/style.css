@@ -387,7 +387,7 @@ a:hover {
 
 /* Style pour les tableaux dans les cartes */
 table.display {
-    width: 80%; /* Limite la largeur à 80% du conteneur */
+    width: 100%; /* Limite la largeur à 80% du conteneur */
     margin: 0 auto; /* Centre le tableau horizontalement */
     table-layout: auto; /* Permet aux colonnes de s'adapter au contenu */
     border-collapse: collapse; /* Assure un style uniforme des bordures */
@@ -533,4 +533,116 @@ table.display tbody tr:nth-child(even) {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Légère ombre */
     margin-top: 20px; /* Espace au-dessus de la carte */
     box-sizing: border-box; /* Assure que le padding est inclus dans la largeur totale */
+}
+
+/* Conteneur pour les cartes de l'historique */
+.history-cards-container {
+    display: flex;
+    flex-wrap: wrap; /* Permet aux cartes de s'empiler sur petit écran */
+    gap: 20px; /* Espacement entre les cartes */
+    justify-content: space-between; /* Espacement uniforme */
+}
+
+/* Style des cartes de l'historique */
+.history-card {
+    flex: 1 1 100%; /* La carte occupe toute la largeur */
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Pour petit écran, la carte occupe 100% */
+@media (max-width: 768px) {
+    .history-card {
+        flex: 1 1 100%; /* La carte s'étend sur toute la largeur */
+    }
+}
+
+/* Style pour le tableau */
+#history-table {
+    width: 100%; /* Assure que le tableau occupe toute la largeur */
+    border-collapse: collapse;
+}
+
+#history-table th,
+#history-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+#history-table th {
+    background: #f4f4f4;
+    font-weight: bold;
+}
+
+/* Espacement supplémentaire entre la barre de recherche et le tableau */
+.dataTables_wrapper .dataTables_filter {
+    margin-bottom: 20px; /* Ajoute un espace sous la barre de recherche */
+}
+
+.dataTables_wrapper .dataTables_filter label {
+    display: flex;
+    align-items: center; /* Centre verticalement le champ de recherche */
+    gap: 10px; /* Espace entre le label et l'input */
+}
+
+.dataTables_wrapper {
+    margin-top: 20px; /* Ajoute un espace au-dessus du tableau */
+    margin-bottom: 20px; /* Ajoute un espace en dessous du tableau */
+}
+/* Style pour la carte des paramètres */
+.settings-card {
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    box-sizing: border-box;
+    width: 100%; /* La carte occupe toute la largeur disponible */
+    margin: 20px auto; /* Espacement vertical et centrage */
+    max-width: 800px; /* Limite la largeur maximale */
+}
+
+/* Style pour les tables dans les paramètres */
+.settings-card .form-table {
+    width: 100%; /* Table occupe toute la largeur de la carte */
+    border-collapse: collapse;
+}
+
+.settings-card .form-table th {
+    text-align: left;
+    padding: 10px;
+    font-weight: bold;
+}
+
+.settings-card .form-table td {
+    padding: 10px;
+}
+
+.settings-card input[type="text"] {
+    width: 100%; /* Le champ texte occupe toute la largeur */
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Bouton pour soumettre */
+.settings-card .button-primary {
+    background: linear-gradient(90deg, #0073aa, #005177);
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.settings-card .button-primary:hover {
+    background: linear-gradient(90deg, #005177, #003f5f);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
 }

@@ -43,27 +43,35 @@ jQuery(document).ready(function ($) {
         });
     }
 
-    // Fonction pour afficher les résultats dans un seul tableau
-    function displayHistoryTable(results) {
-        var $historyTable = $('#slpi-history-table');
-        var tableHtml = '<table id="history-datatable" class="widefat display"><thead><tr>' +
-            '<th><input type="checkbox" id="select-all"></th>' +
-            '<th>Horodatage</th><th>URL</th><th>Post Type</th>' +
-            '<th>Score Desktop</th><th>Score Mobile</th>' +
-            '<th>Analyse complète</th>' +
-            '</tr></thead><tbody>';
-    
-        results.forEach(function(result) {
-            tableHtml += '<tr data-id="' + result.id + '">' +  // Utilisation de 'data-id' pour stocker l'ID
-                '<td><input type="checkbox" class="entry-checkbox" data-id="' + result.id + '" data-platform="mobile"></td>' +
-                '<td>' + result.date_analyse + '</td>' +
-                '<td><a href="' + result.url + '" target="_blank">' + result.url + '</a></td>' +
-                '<td>' + result.post_type + '</td>' +
-                '<td>' + result.score_desktop + '</td>' +
-                '<td>' + result.score_mobile + '</td>' +
-                '<td><a href="https://developers.google.com/speed/pagespeed/insights/?url=' + encodeURIComponent(result.url) + '" target="_blank">Voir analyse complète</a></td>' +
-                '</tr>';
-        });
+   // Fonction pour afficher les résultats dans un tableau
+function displayHistoryTable(results) {
+    var $historyTable = $('#slpi-history-table');
+    var tableHtml = '<table id="history-datatable" class="widefat display"><thead><tr>' +
+        '<th><input type="checkbox" id="select-all"></th>' +
+        '<th>Horodatage</th>' +
+        '<th>Titre</th>' +  // Remplacer "URL" par "Titre"
+        '<th>Post Type</th>' +
+        '<th>Score Desktop</th>' +
+        '<th>Score Mobile</th>' +
+        '<th>Analyse complète</th>' +
+        '</tr></thead><tbody>';
+
+    results.forEach(function(result) {
+        // Si le titre est disponible, sinon afficher "Titre indisponible"
+        var title = result.title || 'Titre indisponible';
+
+        tableHtml += '<tr data-id="' + result.id + '">' +
+            '<td><input type="checkbox" class="entry-checkbox" data-id="' + result.id + '" data-platform="mobile"></td>' +
+            '<td>' + result.date_analyse + '</td>' +
+            // Remplacer l'URL par le titre avec le lien cliquable
+            '<td><a href="' + result.url + '" target="_blank">' + title + '</a></td>' +
+            '<td>' + result.post_type + '</td>' +
+            '<td>' + result.score_desktop + '</td>' +
+            '<td>' + result.score_mobile + '</td>' +
+            '<td><a href="https://developers.google.com/speed/pagespeed/insights/?url=' + encodeURIComponent(result.url) + '" target="_blank">Voir analyse complète</a></td>' +
+            '</tr>';
+    });
+
     
         tableHtml += '</tbody></table>';
         $historyTable.html(tableHtml);

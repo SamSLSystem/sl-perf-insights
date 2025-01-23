@@ -27,7 +27,7 @@ $articles = get_posts($article_args);
 ?>
 
 <div data-tab-content="analysis" class="slpi-tab-content">
-    <h2>Sélectionnez les pages et articles que vous souhaitez analyser :</h2>
+    <h1>Sélectionnez les pages et articles que vous souhaitez analyser :</h1>
 
     <!-- Sélecteur de filtre -->
     <select id="slpi-filter-select" style="margin-left: 10px; margin-bottom: 20px;">

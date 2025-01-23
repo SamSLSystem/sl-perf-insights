@@ -142,14 +142,20 @@ function slpi_get_history() {
 
     $table_name = $wpdb->prefix . 'slpi_results';
     
-    // Récupération des  analyses
+    // Récupération des analyses
     $results = $wpdb->get_results("SELECT id, date_analyse, url, post_type, score_desktop, score_mobile FROM $table_name ORDER BY date_analyse DESC", ARRAY_A);
 
     if (empty($results)) {
         wp_send_json_error('Aucune donnée disponible.');
     }
 
-    wp_send_json_success($results);
+    // Ajouter le titre des éléments pour chaque ligne
+    foreach ($results as &$result) {
+        $post_id = url_to_postid($result['url']); // Récupérer l'ID de l'élément à partir de l'URL
+        $result['title'] = $post_id ? get_the_title($post_id) : 'Titre indisponible'; // Récupérer le titre si l'ID existe
+    }
+
+    wp_send_json_success($results); // Retourner les données avec les titres
 }
 function slpi_delete_history_bulk() {
     // Vérification des permissions
