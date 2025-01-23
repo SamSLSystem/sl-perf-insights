@@ -9,7 +9,7 @@ jQuery(document).ready(function ($) {
         // Parcours des éléments sélectionnés et récupération des URL et du post_type
         $(selectedItems + ':checked').each(function () {
             var page_url = $(this).val();  // URL de l'élément sélectionné
-            var post_type = $(this).data('post-type');  // Récupérer le post_type à partir de l'attribut data-post-type
+            var post_type = $(this).data('post-type') || 'home'; // Par défaut 'page' si non défini
             
             selectedURLs.push({ url: page_url, post_type: post_type });
         });

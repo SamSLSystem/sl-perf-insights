@@ -96,8 +96,9 @@ function slpi_enqueue_assets($hook) {
     if ($hook !== 'toplevel_page_sl-perf-insights') {
         return;
     }
-    // Inclure la bibliothèque Chart.js
-    wp_enqueue_script('chart-js', 'https://cdn.jsdelivr.net/npm/chart.js', [], '4.0.1', true);
+    
+    
+    
     
     // Inclure le fichier CSS de DataTables
     wp_enqueue_style('datatables-style', 'https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css');
@@ -107,6 +108,9 @@ function slpi_enqueue_assets($hook) {
     
     // Inclure le fichier CSS du plugin
     wp_enqueue_style('slpi-style', SLPI_URL . 'admin/assets/style.css', [], '1.0');
+
+    // Inclure la bibliothèque Chart.js
+    wp_enqueue_script('chart-js', 'https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js', [], '4.4.7', true);
 
     // Inclure les fichiers JS divisés
     wp_enqueue_script('slpi-tabs', SLPI_URL . 'admin/assets/tabs.js', array('jquery'), '1.0', true);
@@ -119,7 +123,8 @@ function slpi_enqueue_assets($hook) {
     wp_enqueue_script('chart-manager', SLPI_URL . 'admin/assets/chart-manager.js', ['chart-js'], '1.0', true);
     wp_enqueue_script('audit-homepage-js', SLPI_URL . 'admin/assets/audit-homepage.js', ['jquery', 'chart-js'], '1.0', true);
     wp_enqueue_script('audit-average-script', SLPI_URL . 'admin/assets/audit-average.js', ['jquery', 'audit-homepage-js'], '1.0', true);
-
+    wp_enqueue_script('slpi-quadrant', SLPI_URL . 'admin/assets/quadrant.js', ['jquery', 'chart-js', 'datatables-script'], '1.0', true);
+    
     // Passer ajaxurl et l’URL de la page d’accueil à audit.js
     wp_localize_script('audit-homepage-js', 'slpiData', [
         'ajaxurl' => admin_url('admin-ajax.php'),
@@ -148,3 +153,4 @@ function slpi_uninstall() {
 
 // Enregistre la fonction de désinstallation
 register_uninstall_hook(__FILE__, 'slpi_uninstall');
+?>

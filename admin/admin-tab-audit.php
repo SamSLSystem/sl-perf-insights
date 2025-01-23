@@ -21,7 +21,7 @@ if (!defined('ABSPATH')) {
         <?php include SLPI_PATH . 'admin/admin-tab-audit-average.php'; ?>
     </div>
     <div class="audit-tab-content" id="audit-tab-quadrant" style="display: none;">
-        <p>La section Quadrant sera bientôt disponible.</p>
+        <?php include SLPI_PATH . 'admin/admin-tab-audit-quadrant.php'; ?>
     </div>
     <div class="audit-tab-content" id="audit-tab-legends" style="display: none;">
         <?php include SLPI_PATH . 'admin/admin-tab-legends.php'; ?> <!-- Inclusion des légendes -->

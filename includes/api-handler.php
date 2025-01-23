@@ -77,7 +77,13 @@ function slpi_store_results($url, $result, $post_type) {
         $post_id = url_to_postid($url);  // Convertir l'URL en post_id
         $post_type = get_post_type($post_id);  // Récupérer le type de contenu (page ou post)
     }
-
+    
+    // Vérifier si l'URL correspond à la page d'accueil
+    $homepage_url = get_home_url();
+    if ($url === $homepage_url) {
+        $post_type = 'home'; // Forcer le post_type à 'home' pour la page d'accueil
+    }
+    
     // Assurez-vous que le post_type est valide
     if (!$post_type) {
         $post_type = 'inconnu';  // Définir un type par défaut en cas d'échec
